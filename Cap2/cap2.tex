@@ -1,89 +1,67 @@
-Micro Air Vehicle Link is a lightweight header-only protocol used in the bidirectional communications between drones and a Control Ground Station (GCS). In general, the GCS sends commands to control the drone and the drone sends its status information in return. It is a binary telemetry protocol designed for resource-constrained systems and bandwidth-constrained links. Nowadays MAVLink is deployed in two major versions: v1.0 and v2.0, which is backwards-compatible. 
-%[https://mavlink.io/en/protocol/overview.html]
+\section{Requisitos gerais}
 
-MAVLink messages have defined formats in order to be consistent between the systems that use the protocol. These formats can be found in an XML file and can be converted to other languages formats, as C/C++ or Python, using a code generator. Writing a new definition in the XML enables to add new messages to the protocol.
+Para o desenvolvimento de um sistema complexo como o proposto, faz-se necessário levantar requisitos de projeto mínimos, visando a utilidade, a eficiência e a acessibilidade disponibilizadas para o usuário. Dados a motivação e o objetivo do trabalho, temos os seguintes requisitos gerais:
 
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=0.75\textwidth]{Cap2/fig_message_structure}
-\caption{Structure of a MAVLink v1.0 Message}
-\label{fig_message_structure}
-\end{figure}
+\begin{enumerate}
 
-A MAVLink message is a sequence of bytes encoded by a GCS and sent by telemetry over a wireless channel. In this process, the payload is transfomed into a specific data structure and sent in bytes through a channel followed by a checksum for error detection. The data structure of a message can be observed in the figure \ref{fig_message_structure}. The length of a message can vary from 8 to 263 bytes, according to the size of the payload. The fields of a message as shown in \ref{fig_message_structure} are:
+	\item Ter uma maneira acessível e eficiente de ler códigos de barra: decidiu-se pelo uso de smartphones Android, a variação de smartphone mais utilizada. Além disso, se houver necessidade de que a OM possua celulares próprios para o controle de material que não o dos militares responsáveis por essa tarefa, tais smartphones têm menor custo, facilitando uma possível compra;
+
+	\item Centralizar a informação de todos os materiais: um dos desafios atuais no controle dos materiais é a compilação das informações. Com a quantidade de papel envolvida, proveniente de anotações de várias pessoas diferentes vistoriando seções da OM, a compilação fica susceptível a erros humanos, seja por interpretação ou falta de atenção. O sistema deve ser capaz de fazer a compilação por si só; e
+    
+    \item Facilitar a geração de relatórios: novamente, a compilação das informações exige juntar as entradas de uma planilha, escrevendo uma a uma. O sistema deve ser capaz de gerar tal informação com as informações já centralizadas.
+    
+\end{enumerate}
+
+\section{Especificações adicionais}
+
+Complementando os requisitos levantados, há ainda as seguintes informações sobre os códigos de barra:
 
 \begin{itemize}
-\item \textbf{Sync}: is a sequence that indicates the beginning of new MAVLink message. It is also known as protocol magic marker; 
-\item \textbf{LEN}: indicates the length of the Payload;
-\item \textbf{SEQ}: is the sequence number of the packet. It is used to detect packet loss;
-\item \textbf{SysID}: identifies the sending system. It is used to differentiate diferent drones on the same network;
-\item \textbf{CompID}: identifies the sending component inside a sending system;
-\item \textbf{MsgID}: is the identification of the message, which is used to know how the payload must be interpreted;
-\item \textbf{Payload}: data of the message, which contains the parameters. It is no longer than 255 bytes; 
-\item \textbf{CRC}: is a 2 bytes checksum used for validation.
+
+	\item Cada material possui um código de barras único, mesmo que seja idêntico a outro material (duas cadeiras de escritório do mesmo modelo possuem códigos diferentes, por exemplo), e o código de barras é traduzido exatamente para o número identificador do material, conforme a Figura \ref{projfig01} abaixo.
+    
+    \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=0.75\textwidth]{Cap2/etiqueta}
+        \caption{Modelo de etiqueta de material.}
+        \label{projfig01}
+    \end{figure}
+    
+    Pode-se ver que há também a informação da OM e da seção na etiqueta (respectivamente UG e Depend), além de uma breve descrição do material e de seu número identificador único.
+    
+    \item Cada OM possui um código identificador, assim como cada seção de cada OM.
+    
 \end{itemize}
 
-%The content of this section is based on the documentation provided in the link https://mavlink.io/en/
+\section{Decisões de programação}
 
-\section{Differences between versions}
+\subsection{Programação do aplicativo}
+Como o sistema operacional (SO) escolhido para os celulares foi o Android, havia a escolha entre Java e Kotlin, ambas linguagens aceitas pelo próprio Google (mantenedor do SO) como linguagens oficiais para programação em Android. Escolheu-se Kotlin pelas seguintes razões:
 
-First of all, a MAVLink 2.0 message has more fields than the previous version. The new fields were designed to bring more flexibility and security to the protocol communication.
+\begin{enumerate}
 
-The new features of MAVLink 2.0 are:
-%https://mavlink.io/en/guide/mavlink_2.html
-\begin{itemize}
-\item More than 256 message IDs (24 bit message ID - over 16 million packets)
-	In the version 1.0, only one byte was designed to message IDs  
-\item Packet signing (authentication)
-\item Extending existing MAVLink messages
-\item Variable length arrays (simplified implementation).
-\end{itemize}
+	\item Sintaxe: Kotlin foi construída com base no que os usuários de Java queriam de uma linguagem de programação. O resultado é uma linguagem mais atraente e simples de entender;
+    
+	\item Concisão: a linguagem reduz drasticamente a quantidade de \textit{boilerplate code}, isto é, seções de código que devem ser incluídas em muitos lugares com pouca ou nenhuma alteração, o que é bastante recorrente em Java;
+    
+    \item Interoperabilidade: a linguagem é mais recente que Java, e portanto a quantidade de bibliotecas produzidas para ela é bem menor. Porém, ela executa usando o mesmo ``motor'' que Java, o JVM, o que torna as duas linguagens completamente interoperáveis entre si;
+    
+    \item Segurança: a linguagem foi estruturada para evitar ao máximo a ocorrência \textit{exceptions} (erros durante a execução dos programas), principalmente um dos erros mais comuns de Java, o de ponteiro nulo.
+    
+\end{enumerate}
 
+Kotlin é uma linguagem bem recente, a versão atual é 1.2.50. Para aprender a programar nessa linguagem, foram usados a documentação oficial da própria linguagem, o curso \cite{kotlinbeginners} para o básico da sintaxe e o curso \cite{kotlinandroid} para a programação própria do Android.
 
-\section{Working with XML}
-MAVLink messages are defined in XML files. The messages that are common to all systems are defined in common.xml and only messages contained in this file are considered standard messages. 
-%https://mavlink.io/en/messages/
+A versão mínima escolhida do Android que aceita o aplicativo é a versão 4.0.3 (Ice Cream Sandwich). Dessa forma, praticamente todos os dispositivos em circulação no mercado atualmente são abrangidos.
 
-\section{Adding a new message}
+\subsection{Programação do banco de dados}
 
-%http://ardupilot.org/dev/docs/code-overview-adding-a-new-mavlink-message.html
+Integrar um sistema novo ou criar uma funcionalidade nova para o SILOMS exigiria muito mais tempo, principalmente devido a questões burocráticas. Com isso, foi decidido criar um sistema complementar ao SILOMS, que utilize dados dele e seja um servidor para todos os usuários do aplicativo desenvolvido. Escolheu-se criar uma API REST utilizando Node.js como \textit{back-end} do servidor (através das bibliotecas Loopback e Swagger) e MongoDB como fonte de dados.
 
-Adding a new message to the protocol can be done by following the steps. We will add a new message called NAMEOFMESSAGE to exemplify the tutorial.
+Montar uma API REST foi a melhor opção encontrada para um servidor remoto de dados que alimenta um aplicativo Android, pois facilita a integração do banco de dados com o aplicativo e ainda permite que uma possível futura integração ao SILOMS ocorra facilmente, bastando apenas escrever as funções REST para o SILOMS servir como fonte de dados.
 
-\textbf{Step 1:} Install MAVProxy and the lastest version of ArduPilot code.
+A escolha do Loopback é baseada na simplicidade: a biblioteca cria facilmente as rotas e comandos necessários para o funcionamento completo de uma estrutura CRUD (\textit{\textbf{C}reate, \textbf{R}ead, \textbf{U}pdate and \textbf{D}elete}), além de facilitar a integração com a fonte de dados e fornecer um sistema de autenticação. O Swagger cria uma interface gráfica para o servidor, permitindo o \textit{debug} visual das funções.
 
-In section \ref{downloading_the_code} you can find how to clone the code from GitHub. Also check Mavproxy, which can be updated by running the next command line in a Terminal.
+Simplicidade também foi o motivo da escolha do MongoDB. Os dados são armazenados em coleções, usando uma notação bastante semelhante ao JSON (\textit{JavaScript Object Notation}). Tal ordenação e classificação é bem próxima de uma \textit{array} de objetos em linguagens orientadas a objeto, o que facilita a combinação das duas formas quando se exporta ou importa dados.
 
-\begin{verbatim}
-sudo pip install --upgrade mavproxy
-\end{verbatim}
-
-\textbf{Step 2:} Decide what type of message you want to add and how it will fit in with the existing MAVLink messages.
-
-\textbf{Step 3:} Add the new message definition to the common.xml or ardupilotmega.xml file in the mavlink submodule;
-
-%\textbf{Step 4:}
-
-\textbf{Step 4:} Add functions to the main vehicle code to handle sending or receiving the command to/from the ground station. 
-
-
-%%\begin{table}
-%%\caption{Exemplo de uma Tabela}
-%%\label{minhatab}
-%\center
-%\begin{tabular}{cccc}
- %  after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
- %\hline
-%	Parametro & Unidade & Valor da simulação & Valor experimental   \\
-%	\hline
- % Comprimento, $\alpha$ & $m$ &  $8,23$  & $8,54$ \\
-  %Altura, $\beta$ & $m$     &  $29,1$ & $28,3$\\
-	%Velocidade, $v$ & $m/s$  &  $60,2$ & $67,3$\\
-	%\hline
-%\end{tabular}
-%\end{table}
-
-
-
-
-
+Outro ponto importante a ser citado se refere ao requisito geral 3. Usar uma API REST em Node.js abre caminho para fazer uma interface gráfica de usuário (GUI) para solicitar o arquivo de relatório. Neste momento ainda não foi decidido quais bibliotecas usar para criar a GUI.

@@ -172,7 +172,7 @@
 %\RequirePackage[debug,a4paper,pagebackref=true,breaklinks,bookmarksopen=true,colorlinks=true,linkcolor=bblue,citecolor=bblue,urlcolor=bblue,bookmarksnumbered=true,hyperindex=true,verbose=true]{hyperref} %% essencial %% gera pdf/dvi com links
 
 %% LINKS ALTERADOS PARA COR PRETA
-\RequirePackage[debug,a4paper,pagebackref=true,breaklinks,bookmarksopen=true,colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black,bookmarksnumbered=true,hyperindex=true,verbose=true]{hyperref} 
+\RequirePackage[debug,pagebackref=true,breaklinks,bookmarksopen=true,colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black,bookmarksnumbered=true,hyperindex=true,verbose=true]{hyperref} 
 %==============================================================================
 
 \ifpdf

@@ -38,7 +38,7 @@
 %   \documentclass[dsc, eng]{ita}
 %		\documentclass[dsc, eng, dv]{ita}
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\documentclass[tg,eng]{ita}    % ITA.cls based on standard book.cls 
+\documentclass[tg]{ita}    % ITA.cls based on standard book.cls 
 % Quando alterar a classe, por exemplo de [msc] para [msc, eng]) rode mais uma vez o botão BUILD OUTPUT caso haja erro
 \usepackage{ae}
 \usepackage{graphicx}
@@ -48,6 +48,7 @@
 \usepackage{subfig}
 \usepackage{multirow}
 \usepackage{float}
+\usepackage{minted}
 
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 % Espaçamento padrão de todo o documento
@@ -62,19 +63,19 @@
 % Identificacoes (se o trabalho for em inglês, insira os dados em inglês)
 % Para entradas abreviadas de Professora (Profa.) em português escreva: Prof$^\textnormal{a}$.
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-\course{Computing Engineering} % Programa de PG ou Curso de Graduação
+\course{Engenharia de Computação} % Programa de PG ou Curso de Graduação
 
 % Autor do trabalho: Nome Sobrenome
 \authorgender{masc}                     %sexo: masc ou fem
-\author{Marcos Santana de}{Oliveira}
-\itaauthoraddress{Rua H8A, 124}{12.228-460}{São José dos Campos--SP}
+\author{Miguel Macedo de Araújo}{Neto}
+\itaauthoraddress{Rua H8A, 113}{12.228-460}{São José dos Campos--SP}
 
 % Titulo da Tese/Dissertação
-\title{Supporting the Development of Unmanned Vehicles: Mavlink Protocol and its Security Aspects}
+\title{Automatização do Conferimento Patrimonial do ICEA usando Smartphones Android}
 
 % Orientador
-\advisorgender{fem}                    % masc ou fem
-\advisor{Prof.~Dr.}{Juliana de Melo Bezerra}{ITA}
+\advisorgender{masc}                    % masc ou fem
+\advisor{Prof.~Dr.}{José Maria Parente de Oliveira}{ITA}
 
 % Coorientador (Caso não haja coorientador, colocar ambas as variáveis \coadvisorgender e \coadvisor comentadas, com um % na frente)
 %\coadvisorgender{fem}									% masc ou fem
@@ -102,7 +103,7 @@
 %\examiner{Prof. Dr.}{Mickey Mouse}{}{DISNEY}
 
 % Data da defesa (mês em maiúsculo, se trabalho em inglês, e minúsculo se trabalho em português) 
-\date{18}{JUNE}{2018}
+\date{11}{junho}{2018}
 
 % Número CDU - (somente para TG)
 \cdu{621.38}
@@ -116,14 +117,14 @@
 \maketitle
 
 % Dedicatoria: Nao esqueca essa secao  ... :-)
-%\begin{itadedication}
-%Aos amigos da Graduacao
-%\end{itadedication}
+\begin{itadedication}
+A todos aqueles que acreditaram e acreditam em mim
+\end{itadedication}
 
 % Agradecimentos
-%\begin{itathanks}
-%\input{Cap0/agradecimentos}
-%\end{itathanks}
+\begin{itathanks}
+\input{Cap0/agradecimentos}
+\end{itathanks}
 
 % Epígrafe
 \thispagestyle{empty}
@@ -132,9 +133,10 @@
 \begin{spacing}{1}
 \mbox{}\vfill
 {\sffamily\itshape
-``If I have seen farther than others,\\
-it is because I stood on the shoulders of giants.''\\}
---- \textsc{Sir~Isaac Newton}
+``As our smartphone becomes even smarter,\\
+mobile technology should actually take\\
+the burden out of our lives.''\\}
+--- \textsc{Peggy Johnson}
 \end{spacing}
 \end{flushright}
 
@@ -145,24 +147,24 @@ it is because I stood on the shoulders of giants.''\\}
 %%\end{abstract}
 
 % Abstract
-\begin{englishabstract}
+\begin{abstract}
 \noindent
 \input{Cap0/abstract}
-\end{englishabstract}
+\end{abstract}
 
 % Lista de figuras
-%\listoffigures %opcional
+\listoffigures %opcional
 
 % Lista de tabelas
 %\listoftables %opcional
 
 % Lista de abreviaturas
-%\listofabbreviations
-%\input{Cap0/listaabreviaturas} %opcional
+\listofabbreviations
+\input{Cap0/listaabreviaturas} %opcional
 
 % Lista de simbolos
-%\listofsymbols
-%\input{Cap0/listasimbolos} %opcional
+% \listofsymbols
+% \input{Cap0/listasimbolos} %opcional
 
 % Sumario
 \tableofcontents
@@ -170,21 +172,22 @@ it is because I stood on the shoulders of giants.''\\}
 \mainmatter
 % Os capitulos comecam aqui
 
-\chapter{Introduction}
+\chapter{Introdução}
 \input{Cap1/cap1}
 
-\chapter{MAVLink Protocol}
+\chapter{Decisões de Projeto} \label{chproj}
 \input{Cap2/cap2}
 
-\chapter{Setting Up SITL in Linux} \label{sec_setting_sitl}
+\chapter{Desenvolvimento} \label{chdev}
 \input{Cap3/cap3}
 
-\chapter{Next Steps}
+\chapter{Próximos Passos} \label{chroadmap}
 \input{Cap4/cap4}
 
 % REFERENCIAS BIBLIOGRAFICAS
-%\renewcommand\bibname{\itareferencesnamebabel} %renomear título do capítulo referências
-%\bibliography{Referencias/referencias}
+\renewcommand\bibname{\itareferencesnamebabel} %renomear título do capítulo referências
+\bibliographystyle{abnt-alf}
+\bibliography{Referencias/referencias}
 
 % Apendices
 %\appendix
@@ -202,22 +205,22 @@ it is because I stood on the shoulders of giants.''\\}
 
 % Folha de Registro do Documento
 % Valores dos campos do formulario
-\FRDitadata{ de Novembro de 2018}
-\FRDitadocnro{DCTA/ITA/DM-018/2015} %(o número de registro você solicita a biblioteca)
-\FRDitaorgaointerno{Instituto Tecnológico de Aeronáutica -- ITA}
+% \FRDitadata{ de Novembro de 2018}
+% \FRDitadocnro{DCTA/ITA/DM-018/2015} %(o número de registro você solicita a biblioteca)
+% \FRDitaorgaointerno{Instituto Tecnológico de Aeronáutica -- ITA}
 %Exemplo no caso de pós-graduação: Instituto Tecnol{\'o}gico de Aeron{\'a}utica -- ITA
-\FRDitapalavrasautor{MAVLink; Drones; Software-In-The-Loop}
-\FRDitapalavrasresult{Cupim; Dilema; Construção}
+% \FRDitapalavrasautor{MAVLink; Drones; Software-In-The-Loop}
+% \FRDitapalavrasresult{Cupim; Dilema; Construção}
 %Exemplo no caso de graduação (TG):
-%\FRDitapalavraapresentacao{Trabalho de Graduação, ITA, São José dos Campos, 2015. \NumPenultimaPagina\ páginas.}
+% \FRDitapalavraapresentacao{Trabalho de Graduação, ITA, São José dos Campos, 2018. \NumPenultimaPagina\ páginas.}
 %Exemplo no caso de pós-graduação (msc, dsc):
-\FRDitapalavraapresentacao{ITA, São José dos Campos. Curso de Engenharia da Computação. Área de Sistemas Aeroespaciais e Mecatrônica. Orientador: Prof.~Dr. Juliana de Melo Bezerra. Defesa em 29/11/2018. Publicada em 25/03/2015.}
-\FRDitaresumo{\input{Cap0/resumo}}
+%\FRDitapalavraapresentacao{ITA, São José dos Campos. Curso de Engenharia da Computação. Área de Sistemas Aeroespaciais e Mecatrônica. Orientador: Prof.~Dr. Juliana de Melo Bezerra. Defesa em 29/11/2018. Publicada em 25/03/2015.}
+% \FRDitaresumo{\input{Cap0/resumo}}
 %  Primeiro Parametro: Nacional ou Internacional -- N/I
 %  Segundo parametro: Ostensivo, Reservado, Confidencial ou Secreto -- O/R/C/S
-\FRDitaOpcoes{N}{O}
+% \FRDitaOpcoes{N}{O}
 % Cria o formulario
-\itaFRD
+% \itaFRD
 
 \end{document}
 % Fim do Documento. O massacre acabou!!! :-)
